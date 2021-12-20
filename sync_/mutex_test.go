@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// 测试mutex 写锁
+// 测试 Mutex 写锁
 func TestMutex(t *testing.T) {
 	lock := sync.Mutex{}
 	lock.Lock()
@@ -28,7 +28,7 @@ func TestMutex(t *testing.T) {
 	require.Equal(t, false, hasLockTwice)
 }
 
-// 测试 rwmetux 读写锁
+// 测试 RWMetux 读写锁
 func TestRWMutex(t *testing.T) {
 	lock := sync.RWMutex{}
 	lock.RLock()
@@ -37,6 +37,8 @@ func TestRWMutex(t *testing.T) {
 	readLockTwice := false
 
 	go func() {
+		// 保证读锁 在时间上先执行
+		<-time.After(2 * time.Second)
 		lock.Lock()
 		writeLockWhenReadLock = true
 		lock.Unlock()
