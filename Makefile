@@ -10,6 +10,9 @@ test_slice_append:
 test_map_get:
 	go test -timeout 60s -run ^TestMapGet$$ github.com/smiecj/go_basic/basic -v -count=1
 
+test_escape:
+	go test -timeout 60s -gcflags="-m" -run ^TestEscapePointer$$ github.com/smiecj/go_basic/basic/escape -v -count=1
+
 test_interview_alphanumber:
 	go test -timeout 60s -run ^TestAlphaNumberPrint$$ github.com/smiecj/go_basic/interview/channel -v -count=1
 
