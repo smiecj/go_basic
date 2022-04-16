@@ -9,7 +9,7 @@ import (
 
 // https://github.com/lifei6671/interview-go/blob/master/question/q012.md
 // 每秒调用一次 proc 方法，且不退出
-// defer recover
+// defer + recover
 func TestTickWithPanic(t *testing.T) {
 	go func() {
 

@@ -78,5 +78,3 @@ func TestEscapePointer(t *testing.T) {
 
 	callInterfaceFunc()
 }
-
-// 当前: 补充内联场景
