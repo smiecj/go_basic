@@ -1,3 +1,9 @@
+build:
+	go build -o main main.go
+
+run:
+	./main
+
 test_float:
 	go test -timeout 60s -run ^TestFloatSaveNumBasic$$ github.com/smiecj/go_basic/test -v -count=1
 
