@@ -2,6 +2,7 @@
 package zookeeper_
 
 import (
+	"flag"
 	"testing"
 	"time"
 
@@ -9,13 +10,18 @@ import (
 	"github.com/smiecj/go_common/util/log"
 )
 
-const (
-	// server = "172.17.0.1:12181"
-	server = "common1.lls.com:2181"
+var (
+	zkAddress *string
 )
 
+func init() {
+	zkAddress = flag.String("zk", "localhost:2181", "zookeeper server address")
+}
+
 func TestConnectServer(t *testing.T) {
-	c, _, err := zk.Connect([]string{server}, time.Second)
+	flag.Parse()
+
+	c, _, err := zk.Connect([]string{*zkAddress}, time.Second)
 	if err != nil {
 		panic(err)
 	}

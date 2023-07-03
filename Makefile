@@ -1,4 +1,5 @@
 MONGO_SERVER ?= localhost:27010
+ZOOKEEPER_SERVER ?= localhost:2181
 
 build:
 	go build -o main main.go
@@ -38,3 +39,6 @@ test_fuzz:
 
 test_mongo:
 	go test -timeout 60s -run ^TestMongo$$ github.com/smiecj/go_basic/db/mongo -v -count=1 -mongo=${MONGO_SERVER}
+
+test_zk:
+	go test -timeout 60s -run ^TestConnectServer$$ github.com/smiecj/go_basic/backend/zookeeper -v -count=1 -zk=${ZOOKEEPER_SERVER}
