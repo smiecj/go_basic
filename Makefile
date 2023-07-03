@@ -1,3 +1,5 @@
+MONGO_SERVER ?= localhost:27010
+
 build:
 	go build -o main main.go
 
@@ -27,3 +29,12 @@ test_interview_tickwithpanic:
 
 test_interview_waitwithtimeout:
 	go test -timeout 60s -run ^TestWaitWithTimeout$$ github.com/smiecj/go_basic/interview/sync_ -v -count=1
+
+test_client:
+	go test -timeout 60s -run ^TestRequestWithSockProxy$$ github.com/smiecj/go_basic/http -v -count=1
+
+test_fuzz:
+	go test -fuzz ^FuzzReverse$$ github.com/smiecj/go_basic/fuzz -v -count=1 -fuzztime 30s
+
+test_mongo:
+	go test -timeout 60s -run ^TestMongo$$ github.com/smiecj/go_basic/db/mongo -v -count=1 -mongo=${MONGO_SERVER}

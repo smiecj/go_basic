@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 
-	"github.com/smiecj/go_basic/prometheus_"
+	"github.com/smiecj/go_basic/backend/prometheus_"
 )
 
 // 主函数
@@ -15,4 +15,3 @@ func main() {
 	ch := make(chan struct{})
 	<-ch
 }
-

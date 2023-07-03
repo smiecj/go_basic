@@ -1,6 +1,8 @@
 package basic
 
 import (
+	"os"
+	"runtime"
 	"testing"
 	"time"
 
@@ -115,6 +117,29 @@ func TestDeferWithReceiver(t *testing.T) {
 	defer book.printNameByPointer()
 
 	book.name = "thinking in java"
+}
+
+// defer with os.Exit
+// https://stackoverflow.com/questions/27629380/how-to-exit-a-go-program-honoring-deferred-calls
+// 当前阅读: https://stackoverflow.com/a/28473339
+// os.Exit(0) 正常退出时，defer 会正常执行，传3、9都不会执行defer，程序会立即退出，和 panic 的过程很不同
+func TestDeferWithExit(t *testing.T) {
+	defer log.Info("defer...")
+
+	exitCode := 9
+	log.Info("[defer] ready to exit with code: %d", exitCode)
+	os.Exit(exitCode)
+	runtime.Goexit()
+	time.Sleep(5 * time.Second)
+}
+
+// 扩展: runtime.Goexit() 和 os.Exit 不同: 停止当前协程，运行所有 defer 方法，等待其他协程正常结束后，进程退出
+func TestDeferWithGoexit(t *testing.T) {
+	defer log.Info("defer...")
+
+	log.Info("[defer] ready to go exit")
+	runtime.Goexit()
+	time.Sleep(5 * time.Second)
 }
 
 // 其他示例: defer + http 访问和错误判断: https://go.dev/play/p/HwV0gDN3NTE
