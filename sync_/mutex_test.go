@@ -54,3 +54,44 @@ func TestRWMutex(t *testing.T) {
 	require.Equal(t, false, writeLockWhenReadLock)
 	require.Equal(t, true, readLockTwice)
 }
+
+// 测试锁拷贝
+// -race:
+func TestMutexCopy(t *testing.T) {
+	mainLock := sync.Mutex{}
+
+	// copy by mutex pointer
+	go func(l *sync.Mutex) {
+		l.Lock()
+	}(&mainLock)
+
+	// unlock in a method with value copy
+	go func(l sync.Mutex) {
+		time.Sleep(5 * time.Second)
+		l.Unlock()
+	}(mainLock)
+
+	time.Sleep(time.Second)
+	mainLock.Lock()
+	mainLock.Unlock()
+}
+
+// 锁拷贝的一个更简单的示例
+type Lock struct {
+	mutex sync.Mutex
+}
+
+func (l *Lock) Lock() {
+	l.mutex.Lock()
+}
+
+func (l Lock) Unlock() {
+	l.mutex.Unlock()
+}
+
+func TestMutexCopySimple(t *testing.T) {
+	l := Lock{}
+	l.Lock()
+	l.Unlock()
+	l.Lock()
+}

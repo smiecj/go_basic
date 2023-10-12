@@ -121,7 +121,7 @@ func TestDeferWithReceiver(t *testing.T) {
 
 // defer with os.Exit
 // https://stackoverflow.com/questions/27629380/how-to-exit-a-go-program-honoring-deferred-calls
-// 当前阅读: https://stackoverflow.com/a/28473339
+// https://stackoverflow.com/a/28473339
 // os.Exit(0) 正常退出时，defer 会正常执行，传3、9都不会执行defer，程序会立即退出，和 panic 的过程很不同
 func TestDeferWithExit(t *testing.T) {
 	defer log.Info("defer...")

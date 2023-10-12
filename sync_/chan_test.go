@@ -1,6 +1,7 @@
 package sync_
 
 import (
+	"fmt"
 	"log"
 	"sync"
 	"testing"
@@ -42,6 +43,52 @@ func TestChanGetWithOK(t *testing.T) {
 		produceTicker.Stop()
 	}()
 	retWaitGroup.Wait()
+}
+
+// 合并两个 channel 的数据 （nil channel 的用法）
+func TestMergeTwoChan(t *testing.T) {
+	chanOdd := make(chan int)
+	chanEven := make(chan int)
+
+	// odd and even producer
+	go func(c chan<- int) {
+		for i := 1; i < 10; i += 2 {
+			chanOdd <- i
+		}
+		close(c)
+	}(chanOdd)
+	go func(c chan<- int) {
+		for i := 2; i < 10; i += 2 {
+			c <- i
+		}
+		close(c)
+	}(chanEven)
+
+	// merge
+	chanAll := make(chan int)
+	go func(chanToMerge chan<- int, chan1, chan2 <-chan int) {
+		defer close(chanToMerge)
+		for chan1 != nil || chan2 != nil {
+			select {
+			case i, ok := <-chan1:
+				if !ok {
+					chan1 = nil
+					continue
+				}
+				chanToMerge <- i
+			case i, ok := <-chan2:
+				if !ok {
+					chan2 = nil
+					continue
+				}
+				chanToMerge <- i
+			}
+		}
+	}(chanAll, chanOdd, chanEven)
+
+	for i := range chanAll {
+		fmt.Println(i)
+	}
 }
 
 // todo: 测试 有 buffer chan
